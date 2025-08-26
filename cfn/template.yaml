@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for integrating Splunk MLTK with Amazon Bedrock'
+
+Parameters:
+  FoundationModelID:
+    Type: String
+    Description: Foundation Model ID in Amazon Bedrock
+
+Resources:
+
+  BedrockUser:
+    Type: 'AWS::IAM::User'
+
+  BedrockUserGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - !Ref AssumeRolePolicy
+
+  BedrockUserToGroupAddition:
+    Type: 'AWS::IAM::UserToGroupAddition'
+    Properties:
+      GroupName: !Ref BedrockUserGroup
+      Users:
+        - !Ref BedrockUser
+
+  BedrockAccessRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: 'IAM Role for providing Amazon Bedrock model access'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !GetAtt BedrockUser.Arn
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: !Sub '${AWS::StackName}-bedrock-policy'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'bedrock:ListFoundationModels'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'bedrock:InvokeModel'
+                Resource: !Sub 'arn:${AWS::Partition}:bedrock:${AWS::Region}::foundation-model/${FoundationModelID}'
+
+  AssumeRolePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      Description: 'IAM User Policy allowing the IAM User to assume the integration IAM Role'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 'sts:AssumeRole'
+            Resource: !GetAtt BedrockAccessRole.Arn
+
+  # Remove Secrets Manager secret after demo setup
+  SecretsManagerSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: !Sub '${AWS::StackName}-bedrock-credentials'
+      Description: 'Secrets Manager Secret for storing IAM User credentials for Amazon Bedrock integration'
+      SecretString: !Sub '{"accessKeyId": "${BedrockUserAccessKey}", "secretAccessKey": "${BedrockUserAccessKey.SecretAccessKey}", "roleArn": "${BedrockAccessRole.Arn}", "awsRegion": "${AWS::Region}"}'
+
+  # Remove IAM user access key after demo setup
+  BedrockUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref BedrockUser
+
+Outputs:
+
+  CredentialsSecret:
+    Description: 'ID of the AWS Secrets Manager Secret holding IAM User credentials'
+    Value: !GetAtt SecretsManagerSecret.Id
