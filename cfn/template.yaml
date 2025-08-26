@@ -68,7 +68,6 @@ Resources:
       Description: 'Secrets Manager Secret for storing IAM User credentials for Amazon Bedrock integration'
       SecretString: !Sub '{"accessKeyId": "${BedrockUserAccessKey}", "secretAccessKey": "${BedrockUserAccessKey.SecretAccessKey}", "roleArn": "${BedrockAccessRole.Arn}", "awsRegion": "${AWS::Region}"}'
 
-  # Remove IAM user access key after demo setup
   BedrockUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
     Properties:
