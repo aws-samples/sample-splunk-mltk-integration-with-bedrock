@@ -5,6 +5,12 @@
 
 This integration connects Splunk's Machine Learning Toolkit (MLTK) with Amazon Bedrock's foundation models, enabling analysts to extract insights from machine data using generative AI within familiar Splunk workflows. By bringing generative AI capabilities directly into Splunk Search Processing Language (SPL) searches, security teams can accelerate investigations, operations teams can streamline root cause analysis, and business teams can generate narrative explanations from technical data, all without specialised AI expertise.
 
+## Blog Post
+
+The content in this README is explained in the following AWS blog post:
+
+[Transform Splunk Data Analysis with Amazon Bedrock's Generative AI Integration](https://aws.amazon.com/blogs/apn/transform-splunk-data-analysis-with-amazon-bedrocks-generative-ai-integration/)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -42,7 +48,7 @@ This integration brings the power of generative AI to your Splunk platform by co
 
 By combining Splunk's powerful data processing capabilities with Amazon Bedrock's state-of-the-art foundation models, such as [**Amazon Nova**](https://aws.amazon.com/ai/generative-ai/nova/), teams can reduce incident resolution time, improve operational efficiency, and unlock deeper insights from their Splunk data.
 
-> 🧠 **Amazon Nova**: In these examples, we will be using the Amazon Nova Lite model that offers powerful multimodal capabilities for processing text, image, and video inputs while balancing performance and cost-effectiveness.
+> 🧠 **Amazon Nova**: In these examples, we will be using the Amazon Nova Lite model that offers powerful multimodal capabilities for processing text, image, and video inputs while balancing performance and cost-effectiveness. You can also use other models, such as Anthropic's Claude 3.5 Haiku.
 
 ## Solution Overview
 
@@ -128,7 +134,7 @@ This process typically takes approximately 5-10 minutes to complete.
 1. Log in to your AWS account
 2. Navigate to the CloudFormation console
 3. Select **Create stack** (**With new resources (standard)**). Upload and use the [CloudFormation template](./cfn/template.yaml) provided.
-4. Provide the **Model ID** of the chosen [foundation model](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html) (e.g., `amazon.nova-lite-v1:0` for [**Nova Lite**](https://aws.amazon.com/ai/generative-ai/nova/)). You can find model IDs listed in the [Supported foundation models in Amazon Bedrock page](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html).
+4. Provide the **Model ID** of the chosen [foundation model](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html) (e.g., `amazon.nova-lite-v1:0` for [**Nova Lite**](https://aws.amazon.com/ai/generative-ai/nova/) or `anthropic.claude-3-5-haiku-20241022-v1:0` for [**Claude 3.5 Haiku**](https://www.anthropic.com/claude/haiku)). You can find model IDs listed in the [Supported foundation models in Amazon Bedrock page](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html).
 
   ![CloudFormation console showing user specified-parameters](./images/cloudformation-parameters.png "CloudFormation Stack Creation Parameters")
   *CloudFormation console showing user-specified parameters*
@@ -167,7 +173,7 @@ After retrieving the secret from Secrets Manager, you'll need to map specific va
    - **AWS Access Token**: The secret access key (`secretAccessKey`) from the secret
    - **Role ARN**: The role ARN (`roleArn`) from the secret
 5. Adjust an appropriate **Request Timeout** if required (default: `200`)
-6. Select your chosen model from the **Select Model** dropdown (e.g., `amazon.nova-lite-v1:0`). This must match the model ID provided during the CloudFormation stack deployment.
+6. Select your chosen model from the **Select Model** dropdown (e.g., `amazon.nova-lite-v1:0` or `anthropic.claude-3-5-haiku-20241022-v1:0`). This must match the model ID provided during the CloudFormation stack deployment.
 
 > ⚠️ **Models Not Populating?**: If the **Select Model** dropdown is not populating at this stage, confirm that your IAM configuration, including the IAM user's credentials, are correct.
 
