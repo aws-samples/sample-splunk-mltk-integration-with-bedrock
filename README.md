@@ -106,8 +106,8 @@ The integration leverages several AWS services to provide access to Amazon Bedro
 
 Before getting started, ensure you have:
 - [ ] AWS account with permissions to deploy and configure the [necessary AWS resources](#AWS-Services-Used)
-- [ ] Splunk Enterprise or Splunk Cloud with [Splunk MLTK 5.6.0](https://docs.splunk.com/Documentation/MLApp/5.6.0/User/Whatsnew) or later installed. You can upgrade this app using Splunk's **Manage Apps**.
-- [ ] Splunk Python for Scientific Computing 4.2.3 or laster installed. You can upgrade this app using Splunk's **Manage Apps**.
+- [ ] Splunk Enterprise or Splunk Cloud with [Splunk MLTK 5.6.0](https://docs.splunk.com/Documentation/MLApp/5.6.0/User/Whatsnew) or later installed. You can upgrade this app using Splunk's **Manage Apps** page.
+- [ ] Splunk Python for Scientific Computing 4.2.3 or later installed. You can upgrade this app using Splunk's **Manage Apps** page.
 - [ ] Foundational model you are planning to use enabled in AWS's Amazon Bedrock **Model access** console. To enable models, visit the Amazon Bedrock console, navigate to **Model access**, and request access to your desired models.
 
   ![Amazon Bedrock console showing model access for Amazon Nova Lite](./images/bedrock-model-access.png "Amazon Bedrock console showing model access for Amazon Nova Lite")
